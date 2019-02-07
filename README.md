@@ -6,3 +6,6 @@ Scanner mappen indeholder den første version af vores scanner kode, dvs. allerf
 
 ### Display
 Display mappen indeholder den første version af vores display kode, dvs. allerførste gang fik TFT LCD displayet til at virke.
+
+### fims_projekt.ino
+fims_projekt.ino filen indeholder vores nurværende version af produktets source code.
