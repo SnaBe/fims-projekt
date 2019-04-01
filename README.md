@@ -8,7 +8,7 @@ Scanner mappen indeholder den første version af vores scanner kode, dvs. allerf
 RTC mappen indeholder den første version af vores RTC kode, dvs. allerførste gang vi fik Real Time Clock modulet til at virke.
 
 ### Display
-Display mappen indeholder den første version af vores display kode, dvs. allerførste gang vi fik TFT LCD displayet til at virke.
+Display mappen indeholder de 2 første versioner af vores display kode, touch og non touch, dvs. allerførste gang vi fik begge LCD displays til at virke.
 
 
 ### MICRO SD
