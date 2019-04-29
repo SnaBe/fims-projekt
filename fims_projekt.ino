@@ -8,13 +8,20 @@
 //Arduino Mega, til ekstra lageringsplads
 //SD-kort læser, til at gemme filer og data
 
+//Importer de nødvendige biblioteker
 #include <usbhid.h>
 #include <usbhub.h>
 #include <hiduniversal.h>
 #include <hidboot.h>
+#include <ArduinoJson.h>
+#include <SD.h>
 #include <SPI.h>
 #include <LiquidCrystal.h>
 #include <DS3231.h>
+
+
+char stregkodeChar[50];
+int countChar = 0;
 
 const int rs = 7, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
@@ -29,6 +36,17 @@ class MyParser : public HIDReportParser {
     virtual void OnKeyScanned(bool upper, uint8_t mod, uint8_t key);
     virtual void OnScanFinished();
 };
+
+String findVare(char stregkode[50]) {
+  Serial.println("Parsed code: ");
+  Serial.println(stregkode);
+  String vare = String(stregkode);
+  if(vare == "5740700994203") {
+    return "Fanta Lemon";
+  } else {
+    return "Ukendt vare";
+  }
+}
 
 MyParser::MyParser() {}
 
@@ -68,13 +86,22 @@ void MyParser::OnKeyScanned(bool upper, uint8_t mod, uint8_t key) {
   uint8_t ascii = KeyToAscii(upper, mod, key);
   Serial.print((char)ascii);
   lcd.print((char)ascii);
+  stregkodeChar[countChar] = (char)ascii;
+  countChar += 1;
 }
 
 void MyParser::OnScanFinished() {
-  lcd.setCursor(0, 1);
-  lcd.print("Varer scannet!");
   Serial.println(" - Finished");
+  lcd.setCursor(0, 1);
+  lcd.print(stregkodeChar);
+  Serial.println(stregkodeChar);
+  if(stregkodeChar == "5740700994203") {
+    Serial.println("Lemon Fanta");
+  }
+  Serial.println(findVare(stregkodeChar));
+  countChar = 0;
 }
+
 
 USB Usb;
 USBHub Hub(&Usb);
@@ -84,11 +111,15 @@ MyParser Parser;
 void setup() {
   lcd.begin(16, 2);
   Serial.begin(115200);
+  while (!Serial) continue;
+  Serial.println("Loading RTC module.");
   rtc.begin();
+  Serial.println("Initialising the connection to the USB Host Shield.");
   if (Usb.Init() == -1) {
     Serial.println("OSC did not start.");
   }
   delay(200);
+  Serial.println("All set, F.I.M.S is running");
   Hid.SetReportParser(0, &Parser);
 }
 
