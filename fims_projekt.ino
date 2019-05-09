@@ -1,4 +1,4 @@
-//17-01-2019
+  //17-01-2019
 //Simon S. Sørensen
 //Teknologi eksamensprojekt 2018-2019
 
@@ -18,7 +18,6 @@
 #include <SPI.h>
 #include <LiquidCrystal.h>
 #include <DS3231.h>
-
 
 char stregkodeChar[50];
 int countChar = 0;
@@ -42,11 +41,20 @@ String findVare(char stregkode[50]) {
   Serial.println(stregkode);
   String vare = String(stregkode);
   if(vare == "5740700994203") {
-    return "Fanta Lemon";
+    Serial.println("Fanta Lemon");
+    return "Fanta Lemon";   
+  } else if(vare == "5760466304160") {
+    Serial.println("Buko Rejeost");
+    return "Buko Rejeost";    
+  } else if(vare == "5760466904919") {
+    Serial.println("Kærgården smør");
+    return "Kærgården smør";    
   } else {
+    Serial.println("Ukendt vare!");
     return "Ukendt vare";
   }
 }
+
 
 MyParser::MyParser() {}
 
@@ -93,15 +101,10 @@ void MyParser::OnKeyScanned(bool upper, uint8_t mod, uint8_t key) {
 void MyParser::OnScanFinished() {
   Serial.println(" - Finished");
   lcd.setCursor(0, 1);
-  lcd.print(stregkodeChar);
-  Serial.println(stregkodeChar);
-  if(stregkodeChar == "5740700994203") {
-    Serial.println("Lemon Fanta");
-  }
+  lcd.print(findVare(stregkodeChar));
   Serial.println(findVare(stregkodeChar));
   countChar = 0;
 }
-
 
 USB Usb;
 USBHub Hub(&Usb);
